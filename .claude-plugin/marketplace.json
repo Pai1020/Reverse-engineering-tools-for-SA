@@ -2,7 +2,8 @@
   "$schema": "https://json.schemastore.org/claude-code-marketplace.json",
   "name": "sa-reverse-engineering-toolkit",
   "owner": {
-    "name": "pai5384"
+    "name": "pai5384",
+    "url": "https://github.com/Pai1020"
   },
   "plugins": [
     {
