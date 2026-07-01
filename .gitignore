@@ -13,3 +13,6 @@ package-lock.json
 # Playwright artifacts
 test-results/
 playwright-report/
+
+#claude
+.claude/

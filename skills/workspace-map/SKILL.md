@@ -12,6 +12,8 @@ disconnected document trees.
 
 > Requires `.workspace-profile.md` (see `workspace-discovery`). If absent, stop
 > and tell the user this skill only applies to multi-service workspaces.
+> **Also load skill `analysis-conventions`** (§12 output-language rule applies
+> to `SERVICE-MAP.md` like every other produced document).
 
 ## Inputs
 

@@ -197,3 +197,36 @@ Confidence mapping (per §8):
 - **High**: derived directly from if/else, switch, method calls.
 - **Medium**: from variable/constant naming or context inference.
 - **Low**: inferred from code comments (comments are speculation).
+
+---
+
+## 12. Output language
+
+All produced analysis documents (DEPENDENCIES.md, VARIABLE-LIST.md, ERD.md,
+FUNCTION-LIST.md, FLOWCHART.md, BUSINESS-RULES.md, UI-VERIFY.md, SD.md,
+API-CONTRACT.md, SA.md, verify-report.md, SERVICE-MAP.md, and any future
+rollup docs) are written primarily in **Traditional Chinese (繁體中文)**,
+with English kept only for:
+
+- Code identifiers quoted verbatim: class/method/field/variable names, file
+  paths, table/column names.
+- Framework/technical tokens without a stable Chinese equivalent: annotation
+  names (`@RestController`), HTTP verbs (GET/POST), SQL keywords, protocol
+  names.
+- Mermaid node IDs (per §10 — display text inside nodes should still be
+  Chinese; only the ID token stays English/ASCII since mermaid requires it).
+- Content quoted verbatim from source (code comments, error/log messages,
+  external API field names) — quote as-is, do not translate the quotation
+  itself, but the surrounding explanation is still Chinese.
+- Established acronyms with no idiomatic short Chinese form (e.g. API, SQL,
+  JWT, ID) — use as-is inline rather than forcing an awkward translation.
+
+Do not translate the structural markdown you're filling into a template
+(section headers like "Given-When-Then" stay as the fixed term the skill
+defines — see the skill's own Output format for which headers are fixed
+vocabulary vs which are prose you write).
+
+This rule applies regardless of the profile card's or source code's own
+language — a codebase with English identifiers and comments still gets a
+Traditional-Chinese analysis document; only the identifiers/comments
+themselves stay in their original form when quoted.
