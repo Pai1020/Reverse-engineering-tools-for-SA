@@ -1,0 +1,88 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "FLOWCHART.json",
+  "description": "Structured sidecar for FLOWCHART.md, written by the flowchart skill alongside the markdown doc. The flow diagrams themselves stay mermaid/ASCII-only in the markdown — this sidecar captures the branching/reasoning facts behind them, which is what requirement-gaps and dashboard tooling actually need to consume.",
+  "type": "object",
+  "required": ["function_name", "generated_at", "overview"],
+  "properties": {
+    "function_name": { "type": "string" },
+    "module": { "type": "string" },
+    "feature": { "type": "string" },
+    "page": { "type": "string" },
+    "service_id": { "type": ["string", "null"] },
+    "generated_at": { "type": "string", "format": "date-time" },
+    "overview": {
+      "type": "object",
+      "properties": {
+        "business_purpose": { "type": "string" },
+        "entry_point": { "type": "string" },
+        "module": { "type": "string" },
+        "tables_involved": { "type": "array", "items": { "type": "string" } },
+        "external_systems": { "type": "array", "items": { "type": "string" } }
+      }
+    },
+    "branches": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "decision_point": { "type": "string" },
+          "condition": { "type": "string" },
+          "branches": {
+            "type": "array",
+            "items": { "type": "object", "properties": { "value": { "type": "string" }, "outcome": { "type": "string" } } }
+          },
+          "uncovered_values": { "type": "array", "items": { "type": "string" } }
+        }
+      }
+    },
+    "transaction_boundaries": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": { "scope": { "type": "string" }, "cross_tm_risk": { "type": "boolean" }, "notes": { "type": "string" } }
+      }
+    },
+    "error_handling": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": { "path": { "type": "string" }, "trigger": { "type": "string" }, "handling": { "type": "string" } }
+      }
+    },
+    "external_interactions": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": { "system": { "type": "string" }, "sequence_summary": { "type": "string" } }
+      }
+    },
+    "reasoning_notes": {
+      "type": "array",
+      "description": "Mandatory per analysis-conventions §5 for non-intuitive conclusions",
+      "items": {
+        "type": "object",
+        "properties": {
+          "flow_step": { "type": "string" },
+          "inference_source": { "type": "string" },
+          "code_location": { "type": "string" },
+          "confidence": { "type": "string", "enum": ["high", "medium", "low"] },
+          "note": { "type": "string" }
+        }
+      }
+    },
+    "pending_review": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "item": { "type": "string" },
+          "speculation": { "type": "string" },
+          "source": { "type": "string" },
+          "confidence": { "type": "string", "enum": ["high", "medium", "low"] },
+          "impact": { "type": "string" }
+        }
+      }
+    }
+  }
+}

@@ -14,6 +14,10 @@ Produces `FLOWCHART.md` for a target `<FUNCTION_NAME>`.
 > trail §5). Reuse DEPENDENCIES / VARIABLE-LIST / FUNCTION-LIST / ERD if present.
 
 Output: per profile §7, default `<docs_root>/.../<FUNCTION_NAME>/FLOWCHART.md`.
+Also write a structured sidecar `FLOWCHART.json` (same directory), schema
+`templates/schemas/flowchart.schema.json` — the diagrams themselves stay
+mermaid/ASCII in the markdown; the sidecar captures the branching/reasoning
+facts (branches, transaction boundaries, reasoning notes) behind them.
 
 ## Diagram format
 Primary mermaid: `flowchart TD` (main flow/branching), `sequenceDiagram` (call
@@ -75,3 +79,4 @@ Append the human-review section (`analysis-conventions` §11).
 - [ ] External call sequence recorded.
 - [ ] Reasoning notes attached for every non-intuitive conclusion.
 - [ ] mermaid node IDs in English; risk nodes carry ⚠️.
+- [ ] `FLOWCHART.json` written alongside the markdown, from the same findings.

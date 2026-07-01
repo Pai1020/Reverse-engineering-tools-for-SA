@@ -1,0 +1,72 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "API-CONTRACT.json",
+  "description": "Structured sidecar for API-CONTRACT.md, written by the api-contract skill alongside the markdown doc. Each endpoint is self-contained (inherited fields expanded inline), matching the markdown's no-'same-as-above' rule.",
+  "type": "object",
+  "required": ["function_name", "generated_at", "endpoints"],
+  "properties": {
+    "function_name": { "type": "string" },
+    "module": { "type": "string" },
+    "feature": { "type": "string" },
+    "page": { "type": "string" },
+    "service_id": { "type": ["string", "null"] },
+    "generated_at": { "type": "string", "format": "date-time" },
+    "endpoints": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["endpoint", "request_fields", "response_fields"],
+        "properties": {
+          "endpoint": { "type": "string" },
+          "direction": { "type": "string", "enum": ["inbound", "outbound"] },
+          "protocol": { "type": "string" },
+          "request_class": { "type": "string" },
+          "response_class": { "type": "string" },
+          "purpose": { "type": "string" },
+          "request_fields": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "name": { "type": "string" }, "type": { "type": "string" },
+                "required": { "type": "boolean" }, "validation": { "type": "string" },
+                "description": { "type": "string" }, "inherited_from": { "type": ["string", "null"] }
+              }
+            }
+          },
+          "response_fields": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "name": { "type": "string" }, "type": { "type": "string" },
+                "required": { "type": "boolean" }, "validation": { "type": "string" },
+                "description": { "type": "string" }, "inherited_from": { "type": ["string", "null"] }
+              }
+            }
+          },
+          "return_codes": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": { "code": { "type": "string" }, "trigger_condition": { "type": "string" }, "meaning": { "type": "string" } }
+            }
+          }
+        }
+      }
+    },
+    "pending_review": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "item": { "type": "string" },
+          "speculation": { "type": "string" },
+          "source": { "type": "string" },
+          "confidence": { "type": "string", "enum": ["high", "medium", "low"] },
+          "impact": { "type": "string" }
+        }
+      }
+    }
+  }
+}

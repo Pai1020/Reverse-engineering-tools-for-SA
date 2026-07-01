@@ -14,6 +14,10 @@ Produces `UI-VERIFY.md` (+ `images/`) for a target `<FUNCTION_NAME>`.
 
 Output: per profile §7, default `<docs_root>/.../<FUNCTION_NAME>/UI-VERIFY.md`
 and an adjacent `images/` folder; Playwright assets under a `playwright/` subdir.
+**Orchestration mode only**, also write a structured sidecar `UI-VERIFY.json`
+(same directory), schema `templates/schemas/ui-verify.schema.json` — standalone
+mode's sole artifact stays `UI-VERIFY.md`, matching the existing standalone/
+orchestration split for harness files.
 
 ## Purpose
 1. **Verify** the operation flow in FLOWCHART/BUSINESS-RULES matches the real UI.
@@ -83,3 +87,4 @@ behaviour that could not be verified (e.g. live-only flows when in Mock mode).
 - [ ] No secrets in code; credentials only via the named env var.
 - [ ] Each key step has a screenshot (or "⏳ pending" if degraded).
 - [ ] Discrepancies vs FLOWCHART/BUSINESS-RULES reported.
+- [ ] Orchestration mode: `UI-VERIFY.json` written alongside the markdown.

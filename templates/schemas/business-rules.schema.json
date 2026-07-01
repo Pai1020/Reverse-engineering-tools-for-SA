@@ -1,0 +1,62 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "BUSINESS-RULES.json",
+  "description": "Structured sidecar for BUSINESS-RULES.md, written by the business-rules skill alongside the markdown doc.",
+  "type": "object",
+  "required": ["function_name", "generated_at", "rules"],
+  "properties": {
+    "function_name": { "type": "string" },
+    "module": { "type": "string" },
+    "feature": { "type": "string" },
+    "page": { "type": "string" },
+    "service_id": { "type": ["string", "null"] },
+    "generated_at": { "type": "string", "format": "date-time" },
+    "rules": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "layer", "statement"],
+        "properties": {
+          "id": { "type": "string", "description": "Stable id, e.g. CR-01 (core), VR-01 (validation), DR-01 (data-consistency)" },
+          "layer": { "type": "string", "enum": ["core", "validation", "data-consistency"] },
+          "statement": { "type": "string", "description": "Business-language statement, not code" },
+          "why": { "type": "string" },
+          "violation_handling": { "type": "string" },
+          "related_rules": { "type": "array", "items": { "type": "string" } },
+          "given_when_then": {
+            "type": ["object", "null"],
+            "properties": { "given": { "type": "string" }, "when": { "type": "string" }, "then": { "type": "string" } }
+          },
+          "inference_source": { "type": "string", "enum": ["code logic", "variable naming", "code comments", "constant naming", "context inference", "unconfirmable"] },
+          "confidence": { "type": "string", "enum": ["high", "medium", "low", "very low"] }
+        }
+      }
+    },
+    "behaviour_comment_conflicts": {
+      "type": "array",
+      "description": "Per the skill's speculation-tracking rule: code behaviour vs stale/wrong comments",
+      "items": {
+        "type": "object",
+        "properties": {
+          "rule_id": { "type": "string" },
+          "code_behaviour": { "type": "string" },
+          "comment_says": { "type": "string" },
+          "recommendation": { "type": "string" }
+        }
+      }
+    },
+    "pending_review": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "item": { "type": "string" },
+          "speculation": { "type": "string" },
+          "source": { "type": "string" },
+          "confidence": { "type": "string", "enum": ["high", "medium", "low"] },
+          "impact": { "type": "string" }
+        }
+      }
+    }
+  }
+}

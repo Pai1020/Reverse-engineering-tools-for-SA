@@ -32,7 +32,8 @@ modify skill files or templates. No secrets.
    extract validation rules and return codes. Each API self-contained. Trace to code.
 3. **Write** `<docs_root>/[<SERVICE>/]<MODULE>/<FEATURE>/<PAGE>/<FUNCTION>/API-CONTRACT.md`
    (`<SERVICE>` only in workspace mode) per the skill's output structure +
-   human-review section.
+   human-review section, plus the `API-CONTRACT.json` sidecar (schema
+   `templates/schemas/api-contract.schema.json`) from the same findings.
 4. **Handoff (orchestration only)**: update state.json (incl. `service`); write
    `handoff-api-contract-to-sa.md`; append run-log.
 

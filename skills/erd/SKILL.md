@@ -14,6 +14,8 @@ Produces `ERD.md` for a target `<FUNCTION_NAME>`.
 > `VARIABLE-LIST.md` if present.
 
 Output: per profile §7, default `<docs_root>/.../<FUNCTION_NAME>/ERD.md`.
+Also write a structured sidecar `ERD.json` (same directory), schema
+`templates/schemas/erd.schema.json`, regenerated together with the markdown.
 
 ## Analysis logic
 
@@ -92,6 +94,7 @@ inter-field business constraints, data lifecycle, cross-table consistency rules.
 - [ ] Relations based on real JOINs / field usage, not assumed "standard" ones.
 - [ ] Table names confirmed in queries (with schema prefix); endpoints confirmed.
 - [ ] Cross-transaction-manager / cross-data-source risk annotated.
+- [ ] `ERD.json` written alongside the markdown, from the same findings.
 - [ ] ASCII/mermaid diagrams readable; naming consistent (storage UPPER_SNAKE,
       model camelCase) — adjust to the project's actual conventions.
 

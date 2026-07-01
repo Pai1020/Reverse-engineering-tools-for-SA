@@ -33,7 +33,8 @@ worker. Do not modify skill files or templates. No secrets.
    architecture mapping + API boundaries). Trace to code.
 3. **Write** `<docs_root>/[<SERVICE>/]<MODULE>/<FEATURE>/<PAGE>/<FUNCTION>/SD.md`
    (`<SERVICE>` only in workspace mode) per the skill's output structure +
-   human-review section.
+   human-review section, plus the `SD.json` sidecar (schema
+   `templates/schemas/sd.schema.json`) from the same findings.
 4. **Handoff (orchestration only)**: update state.json (incl. `service`); write
    `handoff-sd-to-sa.md`, and `handoff-sd-to-api-contract.md` if a WS/API entry
    point; append run-log.

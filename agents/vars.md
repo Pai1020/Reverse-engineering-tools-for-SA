@@ -31,7 +31,8 @@ correct Layer-N worker. Do not modify skill files or templates. No secrets.
    unconfirmable items.
 3. **Write** `<docs_root>/[<SERVICE>/]<MODULE>/<FEATURE>/<PAGE>/<FUNCTION>/VARIABLE-LIST.md`
    (`<SERVICE>` only in workspace mode) per the skill's output format +
-   human-review section.
+   human-review section, plus the `VARIABLE-LIST.json` sidecar (schema
+   `templates/schemas/variable-list.schema.json`) from the same findings.
 4. **Handoff (orchestration only)**: update state.json (`status=done`, `service`,
    `doc_path`, `confidence`, `pending_review`, `ended_at`); write
    `handoff-vars-to-flow.md` (what to read, key assumptions, items to confirm,

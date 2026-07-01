@@ -31,7 +31,8 @@ Layer-N worker. Do not modify skill files or templates. No secrets.
    unconfirmable items.
 3. **Write** `<docs_root>/[<SERVICE>/]<MODULE>/<FEATURE>/<PAGE>/<FUNCTION>/ERD.md`
    (`<SERVICE>` only in workspace mode) per the skill's output format +
-   human-review section.
+   human-review section, plus the `ERD.json` sidecar (schema
+   `templates/schemas/erd.schema.json`) from the same findings.
 4. **Handoff (orchestration only)**: update state.json (incl. `service`); write
    `handoff-erd-to-flow.md`; append run-log.
 

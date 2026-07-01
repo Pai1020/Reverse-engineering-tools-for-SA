@@ -39,7 +39,8 @@ Layer-N worker. Do not modify skill files or templates. No secrets.
    confidence and added to pending_review.
 3. **Write** `<docs_root>/[<SERVICE>/]<MODULE>/<FEATURE>/<PAGE>/<FUNCTION>/FLOWCHART.md`
    (`<SERVICE>` only in workspace mode) per the skill's output format +
-   human-review section.
+   human-review section, plus the `FLOWCHART.json` sidecar (schema
+   `templates/schemas/flowchart.schema.json`) from the same findings.
 4. **Handoff (orchestration only)**: update state.json (incl. `service`); write
    `handoff-flow-to-rules.md`; append run-log.
 

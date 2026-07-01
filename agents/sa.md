@@ -41,7 +41,9 @@ files or templates. No secrets.
    reasoning notes for non-intuitive conclusions. Trace to code.
 3. **Write** `<docs_root>/[<SERVICE>/]<MODULE>/<FEATURE>/<PAGE>/<FUNCTION>/SA.md`
    (`<SERVICE>` only in workspace mode) per the selected skill's output
-   structure + human-review section.
+   structure + human-review section, plus the `SA.json` sidecar (schema
+   `templates/schemas/sa.schema.json`, `variant` matching the dispatched
+   skill: ui/api/batch) from the same findings.
 4. **Finalise (orchestration only)**: update state.json (`status=done`,
    `service`, `doc_path`, `confidence`, `pending_review`, `ended_at`); append
    run-log; this is the terminal stage (no downstream handoff).

@@ -38,7 +38,9 @@ correct Layer-N worker. Do not modify skill files or templates. No secrets.
    common source of wrong items in SD verification.
 3. **Write** `<docs_root>/[<SERVICE>/]<MODULE>/<FEATURE>/<PAGE>/<FUNCTION>/BUSINESS-RULES.md`
    (`<SERVICE>` only in workspace mode) per the skill's output format +
-   human-review section (include all conflicts).
+   human-review section (include all conflicts), plus the
+   `BUSINESS-RULES.json` sidecar (schema
+   `templates/schemas/business-rules.schema.json`) from the same findings.
 4. **Handoff (orchestration only)**: update state.json (incl. `service`); write
    `handoff-rules-to-sd.md` (and `handoff-rules-to-ui-verify.md` if a UI entry
    point); append run-log.

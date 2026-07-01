@@ -1,0 +1,119 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "ERD.json",
+  "description": "Structured sidecar for ERD.md, written by the erd skill alongside the markdown doc. The ER diagram itself stays mermaid/ASCII-only in the markdown (no value JSON-encoding a diagram) — this sidecar captures the tabular facts behind it.",
+  "type": "object",
+  "required": ["function_name", "generated_at", "entities"],
+  "properties": {
+    "function_name": { "type": "string" },
+    "module": { "type": "string" },
+    "feature": { "type": "string" },
+    "page": { "type": "string" },
+    "service_id": { "type": ["string", "null"] },
+    "generated_at": { "type": "string", "format": "date-time" },
+    "entities": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "name": { "type": "string" },
+          "source_type": { "type": "string", "enum": ["storage", "model", "ui", "external", "sequence"] },
+          "primary_key": { "type": ["string", "null"] },
+          "sequence": { "type": ["string", "null"] },
+          "key_attributes": { "type": "array", "items": { "type": "string" } },
+          "related_entities": { "type": "array", "items": { "type": "string" } },
+          "purpose": { "type": "string" }
+        }
+      }
+    },
+    "data_flow": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "source_entity": { "type": "string" },
+          "flow": { "type": "string" },
+          "target_entity": { "type": "string" },
+          "flow_type": { "type": "string" },
+          "business_rule": { "type": "string" },
+          "implementation": { "type": "string" }
+        }
+      }
+    },
+    "data_access_mapping": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "table": { "type": "string" },
+          "mapper": { "type": "string" },
+          "mapping_def": { "type": "string" },
+          "model": { "type": "string" },
+          "query_class": { "type": "string" },
+          "sequence": { "type": ["string", "null"] },
+          "operation": { "type": "string" }
+        }
+      }
+    },
+    "field_mapping": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "column": { "type": "string" },
+          "storage_type": { "type": "string" },
+          "model_property": { "type": "string" },
+          "lang_type": { "type": "string" },
+          "ui_binding": { "type": ["string", "null"] },
+          "operation": { "type": "string" },
+          "description": { "type": "string" }
+        }
+      }
+    },
+    "value_conversions": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "source_value": { "type": "string" },
+          "internal_value": { "type": "string" },
+          "meaning": { "type": "string" },
+          "defined_at": { "type": "string" }
+        }
+      }
+    },
+    "external_systems": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": { "name": { "type": "string" }, "direction": { "type": "string" }, "structure": { "type": "string" } }
+      }
+    },
+    "transaction_boundaries": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "scope": { "type": "string" },
+          "transaction_manager": { "type": "string" },
+          "propagation": { "type": "string" },
+          "entities_involved": { "type": "array", "items": { "type": "string" } },
+          "notes": { "type": "string" }
+        }
+      }
+    },
+    "pending_review": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "item": { "type": "string" },
+          "speculation": { "type": "string" },
+          "source": { "type": "string" },
+          "confidence": { "type": "string", "enum": ["high", "medium", "low"] },
+          "impact": { "type": "string" }
+        }
+      }
+    }
+  }
+}

@@ -147,7 +147,7 @@ Read `diff_rate` and `threshold` from state.json after vspec-patch completes.
 
 ### 6. Summary
 
-Write `<harness_dir>/<run_id>/summary.md`: stage list with status/doc paths/confidence/pending-review totals, quality_score/quality_gate/score_attempts, low-confidence stages (⚠️ prefix), gap-report links, spec quality block (diff_rate ✅/⚠️, verify-report path, verify_round, threshold, patch summary: N patched / M deferred / patch_plan_path). If `diff_rate > threshold`, include the advisory note. Always append this block verbatim:
+Write `<harness_dir>/<run_id>/summary.md`: stage list with status/doc paths/confidence/pending-review totals, quality_score/quality_gate/score_attempts, low-confidence stages (⚠️ prefix), gap-report links, spec quality block (diff_rate ✅/⚠️, verify-report path, verify_round, threshold, patch summary: N patched / M deferred / patch_plan_path). If `diff_rate > threshold`, include the advisory note. If the sum of pending-review items across all stages is greater than 0, append one line: `N pending-review items across stages — run /gap-review <feature> to consolidate.` Always append this block verbatim:
 
 ```
 ⚠️ 決策執行一致性：請 grep skills/ 與 agents/ 確認

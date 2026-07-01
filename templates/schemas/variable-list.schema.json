@@ -1,0 +1,118 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "VARIABLE-LIST.json",
+  "description": "Structured sidecar for VARIABLE-LIST.md, written by the variable-list skill alongside the markdown doc. A projection of the same content — regenerate both together, never let them drift.",
+  "type": "object",
+  "required": ["function_name", "generated_at", "ui_fields", "persisted_fields"],
+  "properties": {
+    "function_name": { "type": "string" },
+    "module": { "type": "string" },
+    "feature": { "type": "string" },
+    "page": { "type": "string" },
+    "service_id": { "type": ["string", "null"] },
+    "generated_at": { "type": "string", "format": "date-time" },
+    "summary_counts": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": { "metric": { "type": "string" }, "count": { "type": "integer" } }
+      }
+    },
+    "ui_fields": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "label": { "type": "string" },
+          "binding_expression": { "type": "string" },
+          "controller_property": { "type": "string" },
+          "type": { "type": "string" },
+          "ui_component": { "type": "string" },
+          "editable": { "type": "boolean" },
+          "description": { "type": "string" }
+        }
+      }
+    },
+    "persisted_fields": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "table": { "type": "string" },
+          "column": { "type": "string" },
+          "storage_type": { "type": "string" },
+          "model_property": { "type": "string" },
+          "lang_type": { "type": "string" },
+          "operation": { "type": "string", "enum": ["select", "insert", "update", "delete"] },
+          "description": { "type": "string" }
+        }
+      }
+    },
+    "constants": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "class_name": { "type": "string" },
+          "name": { "type": "string" },
+          "value": { "type": "string" },
+          "meaning": { "type": "string" },
+          "usage_site": { "type": "string" }
+        }
+      }
+    },
+    "value_conversions": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "map_name": { "type": "string" },
+          "source_key": { "type": "string" },
+          "target_value": { "type": "string" },
+          "meaning": { "type": "string" }
+        }
+      }
+    },
+    "state_control_fields": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "field": { "type": "string" },
+          "type": { "type": "string" },
+          "controls": { "type": "string" },
+          "condition": { "type": "string" },
+          "description": { "type": "string" }
+        }
+      }
+    },
+    "cross_layer_mapping": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "label": { "type": "string" },
+          "ui_expr": { "type": "string" },
+          "controller_prop": { "type": "string" },
+          "service_param": { "type": "string" },
+          "model_prop": { "type": "string" },
+          "column": { "type": "string" },
+          "table": { "type": "string" }
+        }
+      }
+    },
+    "pending_review": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "item": { "type": "string" },
+          "speculation": { "type": "string" },
+          "source": { "type": "string" },
+          "confidence": { "type": "string", "enum": ["high", "medium", "low"] },
+          "impact": { "type": "string" }
+        }
+      }
+    }
+  }
+}

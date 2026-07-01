@@ -14,6 +14,9 @@ Produces `SA.md` for a batch-job target `<FUNCTION_NAME>`/job id. Audience:
 > section of DEPENDENCIES.md; auxiliary: VARIABLE-LIST.md, FUNCTION-LIST.md.
 
 Output: per profile §7, default `<docs_root>/.../<FUNCTION_NAME>/SA.md`.
+Also write a structured sidecar `SA.json` (same directory), schema
+`templates/schemas/sa.schema.json` (shared with `sa`/`sa-api`; set
+`variant: "batch"`), regenerated together with the markdown.
 
 ## Core principle
 Answer in plain language: what the batch does; when it runs / how it is triggered
@@ -47,3 +50,5 @@ schedule times, monitoring rules, failure-recovery procedures.
 - [ ] Failure handling explicit (rerun / catch-up / manual / repair).
 - [ ] Given-When-Then incl. failure scenarios, QA-ready.
 - [ ] No jargon; every statement traces to code.
+- [ ] `SA.json` written alongside the markdown (`variant: "batch"`), from the
+      same findings.

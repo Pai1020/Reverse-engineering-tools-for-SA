@@ -126,7 +126,10 @@ chooses the resume mode.
 - **Step 3.5 — quality gate**: after each produced doc, run `quality-score` and
   stop on `failed_local`, `failed_structural`, or `pending_human`.
 - **Step 4 — summary**: output a run summary including quality_score,
-  quality_gate, score_attempts, and gap-report links.
+  quality_gate, score_attempts, and gap-report links. If any stage produced
+  `pending_review` items, point at `/gap-review <feature>` (skill
+  `requirement-gaps`) to consolidate them into a tracked backlog — this
+  command's summary does not itself aggregate them.
 
 ## Run modes
 | Mode | Trigger | Behaviour |

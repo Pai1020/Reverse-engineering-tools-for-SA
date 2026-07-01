@@ -14,6 +14,9 @@ QA** (not developers).
 > auxiliary: VARIABLE-LIST.md, FUNCTION-LIST.md, UI-VERIFY.md (screenshots).
 
 Output: per profile §7, default `<docs_root>/.../<FUNCTION_NAME>/SA.md`.
+Also write a structured sidecar `SA.json` (same directory), schema
+`templates/schemas/sa.schema.json` — shared with `sa-api`/`sa-batch` (set
+`variant: "ui"`), regenerated together with the markdown.
 
 ## Core principle
 Answer in plain language: what does the feature do; what does the user see / do /
@@ -60,3 +63,5 @@ Append the human-review section (`analysis-conventions` §11).
 - [ ] Output-generation process explained.
 - [ ] UI entry points: screenshots embedded (or noted pending).
 - [ ] Every statement traces to code; reasoning notes for non-intuitive ones.
+- [ ] `SA.json` written alongside the markdown (`variant: "ui"`), from the
+      same findings.

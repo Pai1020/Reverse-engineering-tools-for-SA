@@ -13,6 +13,9 @@ Produces `BUSINESS-RULES.md` for a target `<FUNCTION_NAME>`.
 > Reuse DEPENDENCIES / VARIABLE-LIST / FUNCTION-LIST / ERD / FLOWCHART if present.
 
 Output: per profile §7, default `<docs_root>/.../<FUNCTION_NAME>/BUSINESS-RULES.md`.
+Also write a structured sidecar `BUSINESS-RULES.json` (same directory), schema
+`templates/schemas/business-rules.schema.json`, regenerated together with the
+markdown.
 
 ## Core principle
 Readers need: (1) what rules exist, (2) **why** each exists (business reason, not
@@ -79,3 +82,4 @@ constraints, semantic meaning of codes.
 - [ ] Behaviour-comment conflicts flagged and listed for review.
 - [ ] Implementation-only details excluded.
 - [ ] Derived after flow confirmation, not from assumptions.
+- [ ] `BUSINESS-RULES.json` written alongside the markdown, from the same findings.

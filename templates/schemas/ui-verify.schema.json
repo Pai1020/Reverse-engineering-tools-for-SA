@@ -1,0 +1,44 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "UI-VERIFY.json",
+  "description": "Structured sidecar for UI-VERIFY.md, written by the playwright-verify skill alongside the markdown doc. Written only in orchestration mode (standalone mode's sole artifact stays UI-VERIFY.md, per the ui-verify agent's mode-gate).",
+  "type": "object",
+  "required": ["function_name", "generated_at", "mode", "steps"],
+  "properties": {
+    "function_name": { "type": "string" },
+    "module": { "type": "string" },
+    "feature": { "type": "string" },
+    "page": { "type": "string" },
+    "service_id": { "type": ["string", "null"] },
+    "generated_at": { "type": "string", "format": "date-time" },
+    "mode": { "type": "string", "enum": ["mock", "live"] },
+    "degraded": { "type": "boolean", "description": "True if Playwright install/run failed and scenarios are pending, not a failure" },
+    "steps": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "step_no": { "type": "integer" },
+          "description": { "type": "string" },
+          "expected": { "type": "string" },
+          "observed": { "type": "string", "description": "\"⏳ pending\" if degraded" },
+          "screenshot_path": { "type": ["string", "null"] },
+          "discrepancy": { "type": ["string", "null"], "description": "Mismatch vs FLOWCHART/BUSINESS-RULES, if any" }
+        }
+      }
+    },
+    "pending_review": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "item": { "type": "string" },
+          "speculation": { "type": "string" },
+          "source": { "type": "string" },
+          "confidence": { "type": "string", "enum": ["high", "medium", "low"] },
+          "impact": { "type": "string" }
+        }
+      }
+    }
+  }
+}

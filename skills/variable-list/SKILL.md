@@ -13,6 +13,9 @@ Produces `VARIABLE-LIST.md` for a target `<FUNCTION_NAME>`.
 > `DEPENDENCIES.md` if it already exists for this function.
 
 Output: per profile §7, default `<docs_root>/<MODULE>/<FEATURE>/<PAGE>/<FUNCTION_NAME>/VARIABLE-LIST.md`.
+Also write a structured sidecar `VARIABLE-LIST.json` (same directory), schema
+`templates/schemas/variable-list.schema.json`, regenerated together with the
+markdown from the same findings.
 
 ## Analysis logic
 
@@ -97,6 +100,7 @@ conversions.
 - [ ] Value-conversion maps complete; all branches covered; fallback noted.
 - [ ] Same field's naming reconciled across layers (e.g. camelCase ↔ UPPER_SNAKE).
 - [ ] Every field traces to real code; none invented.
+- [ ] `VARIABLE-LIST.json` written alongside the markdown, from the same findings.
 
 ## Common pitfalls (apply those relevant to the stack)
 - A model property never set, then persisted → stored null.

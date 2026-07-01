@@ -40,6 +40,8 @@ profile card §8.
    (`<SERVICE>` only in workspace mode) with per-step expected vs observed +
    embedded screenshots; report discrepancies against FLOWCHART/BUSINESS-RULES.
    If degraded, mark scenarios "⏳ pending" and include manual commands.
+   **Orchestration mode only**, also write the `UI-VERIFY.json` sidecar
+   (schema `templates/schemas/ui-verify.schema.json`).
 4. **Handoff (orchestration mode only)**: update state.json (incl. `service`);
    write `handoff-ui-verify-to-sd.md`; append run-log. (Standalone mode writes
    none of these — UI-VERIFY.md is the sole artifact.)

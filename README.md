@@ -54,6 +54,12 @@ claude plugin list      # confirm it installed
 # Workspace-only: cross-service dependency graph across every registered service
 /workspace-map
 
+# Consolidate human-review items into a tracked backlog, and (with `apply`) close the loop
+/gap-review <FeatureName> [apply]
+
+# PM/SA rollup: coverage grid, open-gaps summary, diff_rate trend, attention list
+/analysis-dashboard
+
 # Convert any analysis doc to a styled PDF
 /md-to-pdf
 ```
@@ -65,18 +71,23 @@ claude plugin list      # confirm it installed
 
 | 層級 (Layer) | 文件 (Document) | 技能 (Skill) | 適用範圍 (Applies) |
 |-------|----------|-------|---------|
-| 1 | `DEPENDENCIES.md`（+ `.json` 附屬檔） | dependency-analysis | 全部 |
-| 2 | `VARIABLE-LIST.md` | variable-list | 全部 |
-| 2 | `ERD.md` | erd | 全部 |
-| 2 | `FUNCTION-LIST.md`（+ `.json` 附屬檔） | function-list | 全部 |
-| 3 | `FLOWCHART.md` | flowchart | 全部 |
-| 3 | `BUSINESS-RULES.md` | business-rules | 全部 |
-| 3.5 | `UI-VERIFY.md` + 圖片 | playwright-verify | 僅限 UI |
-| 4a | `SD.md` | sd | 全部 |
-| 4b | `API-CONTRACT.md` | api-contract | 僅限 WS/API |
-| 4b | `SA.md` | sa / sa-api / sa-batch | 全部（分派） |
+| 1 | `DEPENDENCIES.md` + `.json` | dependency-analysis | 全部 |
+| 2 | `VARIABLE-LIST.md` + `.json` | variable-list | 全部 |
+| 2 | `ERD.md` + `.json` | erd | 全部 |
+| 2 | `FUNCTION-LIST.md` + `.json` | function-list | 全部 |
+| 3 | `FLOWCHART.md` + `.json` | flowchart | 全部 |
+| 3 | `BUSINESS-RULES.md` + `.json` | business-rules | 全部 |
+| 3.5 | `UI-VERIFY.md` + 圖片 + `.json`（僅協調模式） | playwright-verify | 僅限 UI |
+| 4a | `SD.md` + `.json` | sd | 全部 |
+| 4b | `API-CONTRACT.md` + `.json` | api-contract | 僅限 WS/API |
+| 4b | `SA.md` + `.json` | sa / sa-api / sa-batch | 全部（分派） |
 | verify | `verify-report.md` | verify-spec | 自動（sa 之後）+ 可依需求執行 |
 | workspace | `SERVICE-MAP.md` + `.json` | workspace-map | 僅限多 repo |
+| gaps | `REQUIREMENT-GAPS.md` + `.json` | requirement-gaps | 依需求執行 |
+| dashboard | `DASHBOARD.md` | analysis-dashboard | 依需求執行 |
+
+所有 10 種主要文件類型現在都會同時輸出 markdown 與結構化 `.json` 附屬檔（同一份發現的投影，兩者一起重新產生，絕不會漂移不同步）。
+(All 10 primary doc types now emit both markdown and a structured `.json` sidecar — a projection of the same findings, regenerated together, never left to drift.)
 
 ## 多服務工作區（Multi-service workspaces）
 
@@ -86,6 +97,21 @@ claude plugin list      # confirm it installed
 - `/workspace-map` 會將每個服務的跨服務發現彙整成一張圖：`SERVICE-MAP.md`（mermaid 圖 + 表格）與 `SERVICE-MAP.json`（節點＝服務，邊＝呼叫，含 protocol/path/confidence）。
 
 單一 repo 的使用方式完全不受影響——以上都是附加功能，僅在 `.workspace-profile.md` 存在時才會啟用。
+
+## 需求缺口與 PM/SA 儀表板（Requirement gaps & PM/SA dashboard）
+
+每個產出文件都會標記「⚠️ 待人工確認事項」（`analysis-conventions` §11），並鏡射進各自的 `.json` 附屬檔。`requirement-gaps` 技能（`/gap-review`）會把同一個功能底下所有文件的這些項目彙整成一份**有追蹤狀態**的清單 `REQUIREMENT-GAPS.md`/`.json`（open / answered / resolved），並提供**閉環機制**：
+(Every produced document flags "⚠️ items needing human review" — `requirement-gaps` (`/gap-review`) consolidates them across a feature into one tracked backlog with a status (open/answered/resolved), and closes the loop:)
+
+```
+/gap-review <FeatureName>          # 彙整（只讀，安全）
+/gap-review <FeatureName> apply    # 彙整後，針對已回答的項目派工目標式重新分析（重用既有的 Mode B）
+/gap-review                        # 跨所有已分析功能（及服務）彙總
+```
+
+`apply` 不會重新分析整份文件——它會把每一列答案對應到受影響的階段（重用 `analysis-orchestration` 既有的 Mode B 影響矩陣），只重新派工那些階段，然後重新核對該問題是否真的從重新產生的文件中消失，才會標記為 resolved。
+
+`/analysis-dashboard` 彙整 `runs.md`、各階段品質分數、需求缺口彙總、以及（工作區模式下）`SERVICE-MAP.json`，產出一份可重複產生的 `DASHBOARD.md`：涵蓋度總表（每個功能 × 10 種文件類型的品質關卡狀態）、待解缺口摘要、`diff_rate` 趨勢、以及需要人工關注的項目清單。純粹是唯讀彙整，不會產生任何新的分析內容。
 
 ## 靜態分析事實層（Static-analysis facts layer）
 
@@ -121,21 +147,22 @@ verify-code (standalone): init → (mock ‖ e2e) → static → report → patc
 
 ## 組成元件（Components）
 
-- **21 個技能 (skills)**：analysis-init、analysis-conventions、analysis-orchestration、
-  workspace-discovery、static-index、workspace-map、dependency-analysis、
-  variable-list、erd、function-list、flowchart、business-rules、
-  playwright-verify、sd、api-contract、batch-analysis、sa、sa-api、sa-batch、
-  verify-spec、md-to-pdf。
+- **23 個技能 (skills)**：analysis-init、analysis-conventions、analysis-orchestration、
+  workspace-discovery、static-index、workspace-map、requirement-gaps、
+  analysis-dashboard、dependency-analysis、variable-list、erd、function-list、
+  flowchart、business-rules、playwright-verify、sd、api-contract、
+  batch-analysis、sa、sa-api、sa-batch、verify-spec、md-to-pdf。
 - **16 個代理 (agents)**：deps、vars、erd、funcs、flow、rules、ui-verify、sd、
   api-contract、sa、quality-score、vspec-mock、vspec-static、vspec-e2e、
   vspec-report、vspec-patch。
-- **4 個指令 (commands)**：start-analysis、verify-code、workspace-init、workspace-map。
+- **6 個指令 (commands)**：start-analysis、verify-code、workspace-init、
+  workspace-map、gap-review、analysis-dashboard。
 - **scripts/extract/**：靜態事實擷取 CLI（見上文）。
 - **templates/**：`analysis-profile.template.md`（每個 repo 的設定卡）、
   `workspace-profile.template.md`（工作區／服務登錄卡）、
   `examples/analysis-profile.example.md`（已填寫的參考範例）、
-  `schemas/`（DEPENDENCIES.json/FUNCTION-LIST.json/facts.json 的 JSON schema）、
-  `harness/`（run-state + handoff + verify-report 範本）、`pdf-style.css`。
+  `schemas/`（全部 10 種文件類型 + `requirement-gaps` + `facts.json` 的 JSON schema）、
+  `harness/`（run-state + handoff + verify-report + requirement-gaps 範本）、`pdf-style.css`。
 
 ## 設定卡（Profile cards）
 
@@ -161,8 +188,10 @@ verify-code (standalone): init → (mock ‖ e2e) → static → report → patc
   而非無聲失敗——各項技能會退回純 LLM 閱讀。
 - 路由表擷取（Angular `Routes`、Vue-router）目前尚未被靜態事實層涵蓋；
   輸出路徑的推導仍需直接讀取 router/layout 檔案。
-- 目前 DEPENDENCIES 與 FUNCTION-LIST 已有 JSON 結構化輸出附屬檔（sidecar）；
-  其餘 8 種文件類型目前僅提供 Markdown 格式。
+- 所有產出文件依 `analysis-conventions` §12 以繁體中文為主、英文為輔
+  （程式碼識別字、框架關鍵字、mermaid node ID、原文引用除外）。
+- `/analysis-dashboard` 與 `requirement-gaps` 的 Rollup 模式純粹彙整既有資料，
+  若尚未執行過任何分析（`runs.md` 不存在），會明確告知而非顯示空白/零值。
 
 ## 驗證（供貢獻者使用，Validate for contributors）
 

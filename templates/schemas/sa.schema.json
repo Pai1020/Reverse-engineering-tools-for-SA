@@ -1,0 +1,76 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "SA.json",
+  "description": "Structured sidecar for SA.md, shared by the sa/sa-api/sa-batch skills (all three produce SA.md with the same §1-§4 shape) alongside the markdown doc.",
+  "type": "object",
+  "required": ["function_name", "generated_at", "variant", "feature_overview"],
+  "properties": {
+    "function_name": { "type": "string" },
+    "module": { "type": "string" },
+    "feature": { "type": "string" },
+    "page": { "type": "string" },
+    "service_id": { "type": ["string", "null"] },
+    "generated_at": { "type": "string", "format": "date-time" },
+    "variant": { "type": "string", "enum": ["ui", "api", "batch"] },
+    "feature_overview": { "type": "string", "description": "Plain-language, business audience (analysis-conventions §9 SA tone)" },
+    "screens": {
+      "type": "array",
+      "description": "UI variant only",
+      "items": {
+        "type": "object",
+        "properties": {
+          "screen_name": { "type": "string" },
+          "description": { "type": "string" },
+          "screenshot_paths": { "type": "array", "items": { "type": "string" } }
+        }
+      }
+    },
+    "operation_flow": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "step": { "type": "string" },
+          "user_action": { "type": "string" },
+          "system_response": { "type": "string" },
+          "screen_state": { "type": "string" }
+        }
+      }
+    },
+    "output_generation": {
+      "type": "array",
+      "items": { "type": "object", "properties": { "output_type": { "type": "string" }, "process_description": { "type": "string" } } }
+    },
+    "behavior_specs": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "scenario": { "type": "string" },
+          "given": { "type": "string" }, "when": { "type": "string" }, "then": { "type": "string" },
+          "is_exception": { "type": "boolean" }
+        }
+      }
+    },
+    "reasoning_notes": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": { "conclusion": { "type": "string" }, "source": { "type": "string" }, "confidence": { "type": "string", "enum": ["high", "medium", "low"] } }
+      }
+    },
+    "pending_review": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "item": { "type": "string" },
+          "speculation": { "type": "string" },
+          "source": { "type": "string" },
+          "confidence": { "type": "string", "enum": ["high", "medium", "low"] },
+          "impact": { "type": "string" }
+        }
+      }
+    }
+  }
+}

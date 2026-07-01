@@ -13,6 +13,9 @@ Produces `SD.md` for a target `<FUNCTION_NAME>`. Audience: **developers**.
 > auxiliary: VARIABLE-LIST, ERD, BUSINESS-RULES.
 
 Output: per profile §7, default `<docs_root>/.../<FUNCTION_NAME>/SD.md`.
+Also write a structured sidecar `SD.json` (same directory), schema
+`templates/schemas/sd.schema.json`, mirroring §1-§9, regenerated together
+with the markdown.
 
 ## Core principle
 Answer: what does the architecture look like; why designed this way; where do
@@ -65,3 +68,4 @@ Append the human-review section (`analysis-conventions` §11).
 - [ ] Exception/rollback paths described.
 - [ ] Target-architecture mapping + API boundaries identified.
 - [ ] Technical detail kept; no line-by-line code translation; traces to code.
+- [ ] `SD.json` written alongside the markdown, from the same findings.

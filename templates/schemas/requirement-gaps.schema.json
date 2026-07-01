@@ -1,0 +1,42 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "REQUIREMENT-GAPS.json",
+  "description": "Structured sidecar for REQUIREMENT-GAPS.md, written by the requirement-gaps skill. Consolidates every produced doc's pending_review items (+ structural quality gap-reports) for one feature into one tracked backlog with stable, append-only ids.",
+  "type": "object",
+  "required": ["feature", "generated_at", "gaps"],
+  "properties": {
+    "feature": { "type": "string" },
+    "service": { "type": ["string", "null"] },
+    "generated_at": { "type": "string", "format": "date-time" },
+    "counts": {
+      "type": "object",
+      "properties": { "open": { "type": "integer" }, "answered": { "type": "integer" }, "resolved": { "type": "integer" } }
+    },
+    "gaps": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "item", "status"],
+        "properties": {
+          "id": { "type": "string", "description": "Stable, append-only per stage: <stage>-<n>. Never renumbered or reused." },
+          "item": { "type": "string" },
+          "speculation": { "type": "string" },
+          "source": { "type": "string" },
+          "confidence": { "type": "string", "enum": ["high", "medium", "low"] },
+          "impact": { "type": "string", "description": "Stage/doc affected if corrected — used by Apply to map to a Mode B change-list entry" },
+          "raised_in": {
+            "type": "array",
+            "items": { "type": "string" },
+            "description": "Every doc that raised this same question (post-dedupe)"
+          },
+          "status": { "type": "string", "enum": ["open", "answered", "resolved"] },
+          "answer": { "type": ["string", "null"] },
+          "answered_at": { "type": ["string", "null"], "format": "date-time" },
+          "dispatched_stages": { "type": "array", "items": { "type": "string" }, "description": "Stages re-dispatched via Mode B when this row was applied" },
+          "resolved_at": { "type": ["string", "null"], "format": "date-time" },
+          "status_note": { "type": ["string", "null"], "description": "e.g. \"not yet reflected — needs another pass\" when still open after apply" }
+        }
+      }
+    }
+  }
+}

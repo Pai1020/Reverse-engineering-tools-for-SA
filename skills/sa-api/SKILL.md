@@ -14,6 +14,9 @@ integration developers, maintainers, QA**.
 > auxiliary: VARIABLE-LIST.md, FUNCTION-LIST.md.
 
 Output: per profile §7, default `<docs_root>/.../<FUNCTION_NAME>/SA.md`.
+Also write a structured sidecar `SA.json` (same directory), schema
+`templates/schemas/sa.schema.json` (shared with `sa`/`sa-batch`; set
+`variant: "api"`), regenerated together with the markdown.
 
 ## Core principle
 Answer: what capability the service offers (endpoint list + purpose); how to call
@@ -54,3 +57,5 @@ Append the human-review section (`analysis-conventions` §11).
 - [ ] Given-When-Then grouped per endpoint, QA-ready.
 - [ ] Side effects listed per API.
 - [ ] Every statement traces to code; no vague preconditions.
+- [ ] `SA.json` written alongside the markdown (`variant: "api"`), from the
+      same findings.

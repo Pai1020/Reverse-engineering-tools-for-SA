@@ -15,6 +15,10 @@ entry points.
 > auxiliary: SD.md, VARIABLE-LIST.md.
 
 Output: per profile §7, default `<docs_root>/.../<FUNCTION_NAME>/API-CONTRACT.md`.
+Also write a structured sidecar `API-CONTRACT.json` (same directory), schema
+`templates/schemas/api-contract.schema.json`, regenerated together with the
+markdown — each endpoint self-contained (inherited fields expanded inline),
+matching the markdown's no-"same as above" rule.
 
 ## Core principle
 Answer: how to call (full Request fields per API); what to send (type, required,
@@ -58,3 +62,4 @@ endpoint addresses/SLA, auth mechanism, ambiguous required-field semantics.
 - [ ] Return-code table complete with trigger conditions.
 - [ ] No "same as above"; each API self-contained.
 - [ ] Every field/code traces to real source.
+- [ ] `API-CONTRACT.json` written alongside the markdown, from the same findings.
