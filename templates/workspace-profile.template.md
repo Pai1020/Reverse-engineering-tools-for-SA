@@ -30,11 +30,12 @@
 
 > One row per repo under this parent folder. `path` is relative to this
 > workspace-profile.md's own location. `service_id` must match the `service_id`
-> in that repo's own `.analysis-profile.md` §0.
+> in that repo's own `.analysis-profile.md` §0. **`purpose` must come from the
+> user, not be silently inferred** — see `workspace-discovery` Step 3.
 
-| service_id | path | kind | primary language/framework | base_url / aliases | profile card |
-|------------|------|------|----------------------------|---------------------|--------------|
-| `<service_id>` | `<relative/path>` | frontend / backend / shared-lib / gateway | <e.g. Angular 17 / Spring Boot 3> | <host:port or "N/A"> | `<path>/.analysis-profile.md` |
+| service_id | path | kind | purpose | primary language/framework | base_url / aliases | profile card |
+|------------|------|------|---------|----------------------------|---------------------|--------------|
+| `<service_id>` | `<relative/path>` | frontend / backend / shared-lib / gateway | <one-line: what this service is for, confirmed with the user> | <e.g. Angular 17 / Spring Boot 3> | <host:port or "N/A"> | `<path>/.analysis-profile.md` |
 
 ## 3. Cross-service call matching
 

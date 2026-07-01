@@ -49,11 +49,23 @@ For each candidate, gather enough evidence to propose a classification:
   (`application.yml`/`application.properties`, `environment.ts`,
   `docker-compose.yml`, `.env*`) — if genuinely unknown, leave "N/A" and ask
   in Step 3 rather than guessing.
+- **purpose (draft only, do not present as fact)**: a tentative one-line guess
+  from the build file's `description` field (`package.json`), a top-level
+  `README.md`, or the repo/folder name — this is a starting point for Step 3,
+  never a substitute for asking the user.
 
 ### Step 3 — Interview the user (fill the gaps)
 Batch questions, suggest detected defaults for quick confirmation:
 - Confirm/adjust each candidate's `service_id` (short, unique, stable —
   this is the join key used everywhere downstream), `kind`, and base_url/aliases.
+- **Functional purpose of each repo (required, always ask)** — a one-line,
+  business-level description of what that service actually does (e.g.
+  "handles policy underwriting calculations", "customer-facing web portal",
+  "shared auth library"). Present the Step 2 draft guess as a suggested
+  default, but the user's answer is authoritative — kind/language tell you
+  *what it's built with*, purpose tells you *what it's for*, and downstream
+  analysis (module/feature naming, SERVICE-MAP labelling) needs the latter.
+  Do not leave this blank or infer it silently even when it seems obvious.
 - Any known **cross-service call matching** indirection (service-discovery
   name, API-gateway path prefix, env var indirection) that a literal base_url
   match wouldn't catch — record in §3 of the card.
@@ -76,10 +88,12 @@ follows its normal procedure unchanged, plus fills the new §0
 in Step 3 instead of asking again.
 
 ### Step 6 — Report
-Summarise the registry (service_id → kind → path), list any service still
-missing a profile card, and tell the user the next step: `/workspace-init`
-(if more repos still need profiles) or `/start-analysis` / an individual
-skill for a specific service.
+Summarise the registry as **service_id → kind → purpose → path** (purpose
+front and center, not an afterthought — this is the answer to "what does each
+repo do" the user should walk away with), list any service still missing a
+profile card, and tell the user the next step: `/workspace-init` (if more
+repos still need profiles) or `/start-analysis` / an individual skill for a
+specific service.
 
 ## Fallback contract
 

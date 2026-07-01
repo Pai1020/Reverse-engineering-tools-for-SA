@@ -1,6 +1,6 @@
 ---
 name: analysis-init
-description: Onboarding / preliminary step for code-analysis-package. Explores the target project (build files, directory layout, entry points) and interviews the user, then generates the project profile card `.analysis-profile.md` that every other analysis/verification tool reads. Run this first in any new project.
+description: Onboarding / preliminary step. First confirms with the user whether the target is a single repo or a parent folder holding multiple repos (delegating to workspace-discovery if multiple), then explores the target project (build files, directory layout, entry points) and interviews the user, then generates the project profile card `.analysis-profile.md` that every other analysis/verification tool reads. Run this first in any new project.
 ---
 
 # analysis-init — generate the project profile card
@@ -22,6 +22,32 @@ asking the user**.
 - The project structure changed and the card is stale (re-run to update).
 
 ## Procedure
+
+### Step 0 — Confirm single-repo vs multi-repo scope (always ask)
+
+**Before anything else**, determine whether the target is one repository or a
+parent folder containing several (separated frontend/backend, or
+microservices checked out side by side):
+
+1. Scan the target folder's immediate children for repo/build markers
+   (`pom.xml`, `build.gradle`, `package.json`, `angular.json`, `go.mod`,
+   `*.csproj`, `pyproject.toml`/`requirements.txt`, or a `.git` directory) —
+   same detection the `workspace-discovery` skill uses.
+2. **Always ask the user to confirm**, even if auto-detection seems obvious —
+   do not silently assume single-repo just because the invocation didn't
+   mention "workspace", and do not silently assume multi-repo just because
+   multiple marker-bearing folders were found (a monorepo with one logical
+   service can still have several `package.json`s). Present what was
+   detected as a default suggestion, e.g.: *"Found build markers in
+   `billing-api/` and `billing-ui/` — is this one project with multiple
+   repos (confirm as a workspace), or should I treat `<target>` itself as
+   the single repo to analyse?"*
+3. **If multiple repos confirmed**: stop this skill's single-repo flow and
+   load skill `workspace-discovery` instead — it builds the service registry
+   (`.workspace-profile.md`), and for each registered repo asks the user its
+   **functional purpose** (see that skill's Step 3) before dispatching this
+   same `analysis-init` skill once per repo.
+4. **If single repo confirmed**: continue to Step 1 below as normal.
 
 ### Step 1 — Detect whether a card already exists
 - Check for `${CLAUDE_PROJECT_DIR}/.analysis-profile.md`.

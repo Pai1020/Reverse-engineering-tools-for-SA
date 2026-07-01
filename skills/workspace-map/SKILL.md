@@ -57,6 +57,9 @@ stay as separate edges (don't collapse — the count itself is informative).
 ### Step 4 — Write outputs
 
 Write to `<workspace_docs_root>/_workspace/SERVICE-MAP.md`:
+- A service legend table first: `service_id | kind | purpose | path` (from
+  registry §2) — so a reader gets "what does each repo do" before looking at
+  any graph.
 - A mermaid `flowchart LR` with one node per service (labelled `service_id
   (kind)`) and one edge per call (labelled `<protocol> <path>`).
 - A table below it: `Caller | Callee | Endpoint/Path | Protocol | Confidence |
@@ -68,7 +71,7 @@ Also write `<workspace_docs_root>/_workspace/SERVICE-MAP.json`:
 ```json
 {
   "generated_at": "<ISO-8601>",
-  "nodes": [{ "service_id": "...", "kind": "...", "path": "..." }],
+  "nodes": [{ "service_id": "...", "kind": "...", "purpose": "...", "path": "..." }],
   "edges": [{ "caller": "...", "callee": "...", "endpoint": "...", "protocol": "...", "confidence": "...", "source_doc": "..." }],
   "unregistered_references": ["..."]
 }

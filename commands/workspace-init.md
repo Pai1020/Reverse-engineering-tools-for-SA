@@ -28,14 +28,14 @@ on a single-repo target.
 Read the service registry from `.workspace-profile.md` §2. For every row whose
 `path/.analysis-profile.md` does not yet exist, load skill `analysis-init` with
 that repo as the target, passing the already-confirmed `service_id`/`kind`/
-`base_url` from the registry so the user isn't asked twice.
+`purpose`/`base_url` from the registry so the user isn't asked twice.
 
 Report progress per service as each profile card is generated.
 
 ### Step 3 — Report
 
-Summarise: workspace name, full service registry (service_id → kind → path →
-profile status), and next steps:
+Summarise: workspace name, full service registry (service_id → kind →
+purpose → path → profile status), and next steps:
 - `/start-analysis analyse <Feature>` for a specific service (mention how to
   select which `service_id` if ambiguous),
 - `/workspace-map` once at least two services have some analysis docs, to see
