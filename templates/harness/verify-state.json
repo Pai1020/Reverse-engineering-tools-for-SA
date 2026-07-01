@@ -1,0 +1,71 @@
+{
+  "_comment": "verify-run state.json template. Copied and filled by the verify-spec orchestrator at init.",
+  "_schema_version": "1.3",
+
+  "run_id": "<timestamp>-verify-<feature>",
+  "service": "<service_id from .workspace-profile.md, or null in single-repo mode>",
+  "feature": "<function_name>",
+  "module": "<module from profile module/layer map>",
+  "entry_point": "<entry point: page path or class name>",
+  "entry_type": "ui | ws-api | rest-api | batch | cli",
+  "doc_root": "<docs_root>/<SERVICE>/<MODULE>/<FEATURE>/<PAGE>/<FUNCTION_NAME> (SERVICE segment omitted in single-repo mode), relative to this service's own repo root",
+  "started_at": null,
+  "ended_at": null,
+  "status": "running",
+
+  "verify_round": 1,
+  "threshold": 0.20,
+  "prior_diff_rate": null,
+  "legacy_report_path": null,
+  "patch_mode": "standalone",
+
+  "stages": {
+    "mock": {
+      "status": "pending", "started_at": null, "ended_at": null, "confidence": null,
+      "handoff_in": "handoff-init-to-mock.md", "handoff_out": "handoff-mock-to-static.md",
+      "gate_passed": false, "pending_review": [], "retry_count": 0, "error": null
+    },
+    "e2e": {
+      "status": "pending", "started_at": null, "ended_at": null, "confidence": null,
+      "handoff_in": "handoff-init-to-e2e.md", "handoff_out": "handoff-e2e-to-report.md",
+      "gate_passed": false, "pending_review": [], "retry_count": 0, "error": null,
+      "_skip_when": "entry_type != ui"
+    },
+    "static": {
+      "status": "pending", "started_at": null, "ended_at": null, "confidence": null,
+      "handoff_in": "handoff-mock-to-static.md", "handoff_out": "handoff-static-to-report.md",
+      "gate_passed": false, "pending_review": [], "retry_count": 0, "error": null,
+      "_depends_on": ["mock"]
+    },
+    "report": {
+      "status": "pending", "started_at": null, "ended_at": null, "confidence": null,
+      "handoff_in": ["handoff-static-to-report.md", "handoff-e2e-to-report.md"], "handoff_out": null,
+      "gate_passed": false, "pending_review": [], "retry_count": 0, "error": null,
+      "diff_rate": null, "verify_report_path": null, "legacy_report_path": null,
+      "_depends_on": ["static", "e2e"]
+    },
+    "patch": {
+      "status": "pending", "started_at": null, "ended_at": null,
+      "handoff_in": null, "patch_plan_path": null,
+      "patched": [], "deferred": [], "confirmed": null,
+      "retry_count": 0, "error": null,
+      "_depends_on": ["report"],
+      "_skip_when": "diff_rate == 0"
+    }
+  },
+
+  "_legend": {
+    "status_values": ["pending", "running", "done", "failed", "skipped"],
+    "confidence_values": ["high", "medium", "low"],
+    "diff_rate": "float 0.0-1.0, (wrong + omission) / total items; > threshold(verify_round) -> orchestrator recommends human review and optional re-analysis",
+    "verify_round": "1-based count of times this SD has been verified; drives adaptive threshold",
+    "threshold_schedule": "round 1=0.20, round 2=0.15, round>=3=0.10; controls re-analysis advisory only — patching always runs when diffs exist",
+    "patch_mode": "standalone (list-then-confirm) | pipeline (auto-apply)",
+    "gate_passed": "true = write-back read verification passed, downstream may proceed",
+    "parallel_batch_1": ["mock", "e2e"],
+    "sequential_after_mock": "static",
+    "converge": "report",
+    "post_report": "patch",
+    "verify_report_path": "primary verify artifact path; legacy SD-review.md may be read only as fallback input"
+  }
+}

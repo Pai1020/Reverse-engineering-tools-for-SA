@@ -1,0 +1,23 @@
+{
+  "$schema": "https://json.schemastore.org/claude-code-plugin-manifest.json",
+  "name": "sa-reverse-engineering-toolkit",
+  "displayName": "SA Reverse Engineering Toolkit",
+  "version": "0.1.0",
+  "description": "Reverse-engineering toolkit for SAs: layered code analysis (dependencies, variables, ERD, functions, flowchart, business rules, system design, system analysis, API contract) and spec-vs-code verification, for both single-repo monoliths and multi-service workspaces (separated frontend/backend, or microservices sharing one parent folder), driven by profile cards and a deterministic static-analysis facts layer. Forked and extended from code-analysis-package (https://github.com/jin576tw/code-analysis-package).",
+  "author": {
+    "name": "pai5384"
+  },
+  "license": "MIT",
+  "keywords": [
+    "code-analysis",
+    "reverse-engineering",
+    "documentation",
+    "erd",
+    "flowchart",
+    "system-design",
+    "system-analysis",
+    "verification",
+    "microservices",
+    "static-analysis"
+  ]
+}

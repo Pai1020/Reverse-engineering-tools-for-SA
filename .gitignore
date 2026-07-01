@@ -1,0 +1,15 @@
+# OS / editor
+.DS_Store
+Thumbs.db
+*.swp
+
+# Node (scripts/extract, md-to-pdf / playwright may install here during use)
+node_modules/
+package-lock.json
+
+# Generated PDFs
+*.pdf
+
+# Playwright artifacts
+test-results/
+playwright-report/

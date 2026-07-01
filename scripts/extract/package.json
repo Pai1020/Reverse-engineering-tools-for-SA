@@ -1,0 +1,16 @@
+{
+  "name": "sa-ret-static-extract",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Deterministic static-facts extractors (tree-sitter based) for the SA reverse-engineering toolkit. Run via `node scripts/extract/index.mjs <repo_path>`.",
+  "type": "module",
+  "engines": {
+    "node": ">=18"
+  },
+  "dependencies": {
+    "web-tree-sitter": "^0.25.6",
+    "tree-sitter-wasms": "^0.1.12",
+    "fast-glob": "^3.3.2",
+    "fast-xml-parser": "^4.5.1"
+  }
+}

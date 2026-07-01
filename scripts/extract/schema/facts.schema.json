@@ -1,0 +1,116 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Repo static facts (facts.json)",
+  "description": "Deterministic, AST/XML-derived facts for one repo/service, produced by scripts/extract/index.mjs. Consumed by dependency-analysis and other skills as ground truth for symbol/endpoint/table existence, per skills/static-index/SKILL.md's consult-first contract. Not a substitute for reading source to understand logic/semantics.",
+  "type": "object",
+  "required": ["service_id", "generated_at", "files"],
+  "properties": {
+    "service_id": { "type": ["string", "null"], "description": "From .workspace-profile.md, or null in single-repo mode" },
+    "generated_at": { "type": "string", "format": "date-time" },
+    "files": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["path", "language", "symbols", "endpoints", "outbound_calls", "db_access", "imports"],
+        "properties": {
+          "path": { "type": "string", "description": "Relative to repo root" },
+          "language": { "type": "string", "enum": ["java", "mybatis-xml", "typescript", "vue"] },
+          "error": { "type": "string", "description": "Present only if this file failed to parse; other fields are empty arrays in that case" },
+          "symbols": {
+            "type": "array",
+            "description": "Classes/interfaces/components, with any framework annotations/decorators and their methods",
+            "items": {
+              "type": "object",
+              "properties": {
+                "kind": { "type": "string", "enum": ["class", "interface", "record", "mapper_namespace"] },
+                "name": { "type": "string", "description": "Fully/partially qualified name (nested types dot-joined)" },
+                "annotations": { "type": "array", "items": { "type": "string" } },
+                "decorators": { "type": "array", "items": { "type": "string" } },
+                "is_mapper_interface": { "type": "boolean", "description": "MyBatis @Mapper interface or *Mapper-named interface" },
+                "is_spring_component": { "type": "boolean" },
+                "is_component": { "type": "boolean" },
+                "is_injectable": { "type": "boolean" },
+                "is_jpa_entity": { "type": "boolean", "description": "Has @Entity" },
+                "table_name": { "type": ["string", "null"], "description": "From @Table(name=...) on a @Entity class; null if @Entity has no explicit @Table" },
+                "is_jpa_repository": { "type": "boolean", "description": "Interface extends JpaRepository/CrudRepository/etc." },
+                "repository_entity_type": { "type": ["string", "null"], "description": "First generic type arg, e.g. JpaRepository<Invoice, Long> -> \"Invoice\"" },
+                "repository_id_type": { "type": ["string", "null"], "description": "Second generic type arg" },
+                "di_edges": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": { "field": { "type": "string" }, "injected_type": { "type": ["string", "null"] } }
+                  }
+                },
+                "methods": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "name": { "type": "string" },
+                      "signature": { "type": "string" },
+                      "annotations": { "type": "array", "items": { "type": "string" } },
+                      "start_line": { "type": "integer" },
+                      "end_line": { "type": "integer" }
+                    }
+                  }
+                },
+                "start_line": { "type": "integer" },
+                "end_line": { "type": "integer" }
+              }
+            }
+          },
+          "endpoints": {
+            "type": "array",
+            "description": "REST/WS endpoints this file exposes (backend only)",
+            "items": {
+              "type": "object",
+              "properties": {
+                "http_method": { "type": "string" },
+                "path": { "type": "string" },
+                "handler_symbol": { "type": "string", "description": "ClassName#methodName" },
+                "framework": { "type": "string" },
+                "start_line": { "type": "integer" }
+              }
+            }
+          },
+          "outbound_calls": {
+            "type": "array",
+            "description": "Calls this file makes to another host/service (frontend HTTP client calls, backend service-to-service clients). Cross-referenced against .workspace-profile.md base_url/aliases by dependency-analysis to distinguish cross-service calls from genuine external systems.",
+            "items": {
+              "type": "object",
+              "properties": {
+                "kind": { "type": "string", "enum": ["http"] },
+                "http_method": { "type": "string" },
+                "url_expression": { "type": ["string", "null"], "description": "Literal URL/path if statically known; null if fully dynamic" },
+                "dynamic_suffix": { "type": "boolean", "description": "True if the URL has a non-literal suffix (e.g. string concatenation with a variable)" },
+                "evidence": { "type": "string", "description": "e.g. client_type:RestTemplate when only the client type is known, not a URL" },
+                "start_line": { "type": "integer" }
+              }
+            }
+          },
+          "db_access": {
+            "type": "array",
+            "description": "Data-access statements from MyBatis mapper XML or JPA repository interfaces (@Query / derived-query methods). `source` distinguishes origin; MyBatis entries have `result_map` and real `tables`, JPQL/derived JPA entries have `entity_type` instead of `tables` (JPQL/derived queries reference the entity, not the physical table — join against that entity's own `table_name` in `symbols` to get the real table).",
+            "items": {
+              "type": "object",
+              "properties": {
+                "statement_id": { "type": ["string", "null"], "description": "MyBatis: <id> attribute. JPA: \"RepositoryInterface#methodName\"" },
+                "type": { "type": "string", "enum": ["select", "insert", "update", "delete", "exists", "count"] },
+                "tables": { "type": "array", "items": { "type": "string" }, "description": "Populated for MyBatis and JPA native @Query(nativeQuery=true); empty for JPQL/derived (see entity_type instead)" },
+                "entity_type": { "type": ["string", "null"], "description": "JPA only: the entity type this query operates on (from the repository's generic type argument)" },
+                "parameter_type": { "type": ["string", "null"] },
+                "result_type": { "type": ["string", "null"] },
+                "result_map": { "type": ["string", "null"], "description": "MyBatis only" },
+                "source": { "type": "string", "enum": ["mybatis-xml", "jpa-query-jpql", "jpa-query-native", "jpa-derived"] },
+                "query_text": { "type": ["string", "null"], "description": "JPA @Query only: the raw JPQL/SQL string" },
+                "criteria_fields": { "type": "array", "items": { "type": "string" }, "description": "JPA derived-query only: field names parsed from the method name (e.g. findByStatusAndCustomerId -> [\"Status\", \"CustomerId\"])" }
+              }
+            }
+          },
+          "imports": { "type": "array", "items": { "type": "string" } }
+        }
+      }
+    }
+  }
+}

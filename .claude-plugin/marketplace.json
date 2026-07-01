@@ -1,0 +1,15 @@
+{
+  "$schema": "https://json.schemastore.org/claude-code-marketplace.json",
+  "name": "sa-reverse-engineering-toolkit",
+  "owner": {
+    "name": "pai5384"
+  },
+  "plugins": [
+    {
+      "name": "sa-reverse-engineering-toolkit",
+      "source": "./",
+      "description": "Layered code analysis + spec verification toolkit for SAs, decoupled from any single project via profile cards, with multi-service workspace support and a static-analysis facts layer.",
+      "version": "0.1.0"
+    }
+  ]
+}

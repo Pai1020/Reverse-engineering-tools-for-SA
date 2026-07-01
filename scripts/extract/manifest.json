@@ -1,0 +1,20 @@
+{
+  "_comment": "glob -> extractor mapping. Extension point for future languages: add an entry here and a matching .mjs module exporting an extractFn(filePath, mode).",
+  "extractors": [
+    { "id": "java", "module": "./java.js", "export": "extractJavaFile", "globs": ["**/*.java"] },
+    { "id": "mybatis-xml", "module": "./mybatis-xml.js", "export": "extractMyBatisXmlFile", "globs": ["**/*Mapper.xml", "**/mapper/**/*.xml", "**/mappers/**/*.xml"] },
+    { "id": "frontend-ts", "module": "./frontend.js", "export": "extractFrontendFile", "mode": "ts", "globs": ["**/*.ts", "**/*.tsx"] },
+    { "id": "frontend-vue", "module": "./frontend.js", "export": "extractFrontendFile", "mode": "vue", "globs": ["**/*.vue"] }
+  ],
+  "ignore": [
+    "**/node_modules/**",
+    "**/target/**",
+    "**/dist/**",
+    "**/build/**",
+    "**/.git/**",
+    "**/.analysis/**",
+    "**/*.spec.ts",
+    "**/*.test.ts",
+    "**/*.d.ts"
+  ]
+}

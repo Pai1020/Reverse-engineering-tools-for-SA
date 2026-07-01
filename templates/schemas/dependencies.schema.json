@@ -1,0 +1,96 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "DEPENDENCIES.json",
+  "description": "Structured sidecar for DEPENDENCIES.md, written by the dependency-analysis skill alongside the markdown doc. Same content, machine-readable — consumed by workspace-map (cross_service_calls) and any future dashboard/rollup tooling. The markdown remains the human-readable primary artifact; this is a projection of it, not a separate source of truth (skills must keep both in sync when regenerating).",
+  "type": "object",
+  "required": ["function_name", "generated_at", "dependency_summary", "detailed_dependencies"],
+  "properties": {
+    "function_name": { "type": "string" },
+    "module": { "type": "string" },
+    "feature": { "type": "string" },
+    "page": { "type": "string" },
+    "service_id": { "type": ["string", "null"], "description": "null in single-repo mode" },
+    "generated_at": { "type": "string", "format": "date-time" },
+    "dependency_summary": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "type": { "type": "string", "description": "e.g. Service, Data-access (generated), Tables/collections, External system" },
+          "count": { "type": "integer" },
+          "importance": { "type": "string", "enum": ["high", "medium", "low"] },
+          "examples": { "type": "array", "items": { "type": "string" } }
+        }
+      }
+    },
+    "detailed_dependencies": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "source": { "type": "string" },
+          "depends_on": { "type": "string" },
+          "type": { "type": "string" },
+          "file_location": { "type": "string" },
+          "usage_context": { "type": "string" }
+        }
+      }
+    },
+    "value_conversions": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "source_value": { "type": "string" },
+          "internal_value": { "type": "string" },
+          "meaning": { "type": "string" },
+          "defined_at": { "type": "string" }
+        }
+      }
+    },
+    "cross_service_calls": {
+      "type": "array",
+      "description": "Workspace mode only, from dependency-analysis §3.1. Read directly by workspace-map instead of parsing the markdown table.",
+      "items": {
+        "type": "object",
+        "required": ["callee_service_id"],
+        "properties": {
+          "caller_endpoint": { "type": "string" },
+          "callee_service_id": { "type": "string", "description": "Must match a service_id in .workspace-profile.md §2" },
+          "path": { "type": "string" },
+          "protocol": { "type": "string" },
+          "confidence": { "type": "string", "enum": ["high", "medium", "low"] },
+          "evidence": { "type": "string" }
+        }
+      }
+    },
+    "upstream_data_sources": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "source": { "type": "string" },
+          "this_fn_op": { "type": "string" },
+          "controls": { "type": "string" },
+          "provider": { "type": "string" },
+          "provider_op": { "type": "string" },
+          "provider_page_or_job": { "type": "string" },
+          "depth": { "type": "integer" }
+        }
+      }
+    },
+    "pending_review": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "item": { "type": "string" },
+          "speculation": { "type": "string" },
+          "source": { "type": "string" },
+          "confidence": { "type": "string", "enum": ["high", "medium", "low"] },
+          "impact": { "type": "string" }
+        }
+      }
+    }
+  }
+}

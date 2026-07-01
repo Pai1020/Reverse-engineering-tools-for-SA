@@ -1,0 +1,67 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "FUNCTION-LIST.json",
+  "description": "Structured sidecar for FUNCTION-LIST.md, written by the function-list skill alongside the markdown doc. Same content, machine-readable. The markdown remains the human-readable primary artifact; this is a projection of it (skills must keep both in sync when regenerating).",
+  "type": "object",
+  "required": ["function_name", "generated_at", "methods"],
+  "properties": {
+    "function_name": { "type": "string" },
+    "module": { "type": "string" },
+    "feature": { "type": "string" },
+    "page": { "type": "string" },
+    "service_id": { "type": ["string", "null"], "description": "null in single-repo mode" },
+    "generated_at": { "type": "string", "format": "date-time" },
+    "methods": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["name", "class", "layer", "signature"],
+        "properties": {
+          "name": { "type": "string" },
+          "class": { "type": "string" },
+          "file_location": { "type": "string" },
+          "layer": { "type": "string", "description": "e.g. controller/UI, service, data-access, utility" },
+          "signature": { "type": "string" },
+          "transaction": {
+            "type": ["object", "null"],
+            "properties": { "propagation": { "type": "string" }, "manager": { "type": "string" } }
+          },
+          "trigger": { "type": "string", "description": "How this method is invoked, e.g. button click, scheduled job" },
+          "business_description": { "type": "string" },
+          "downstream_calls": { "type": "array", "items": { "type": "string" } },
+          "upstream_callers": { "type": "array", "items": { "type": "string" } },
+          "accessed_storage": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": { "table": { "type": "string" }, "operation": { "type": "string", "enum": ["select", "insert", "update", "delete"] } }
+            }
+          },
+          "external_calls": { "type": "array", "items": { "type": "string" } },
+          "complexity": { "type": "string", "enum": ["high", "medium", "low"] },
+          "in_method_flowchart_present": { "type": "boolean", "description": "True if FUNCTION-LIST.md includes the Step-5 in-method flowchart + storage/job impact matrix for this method" },
+          "job_trigger": {
+            "type": ["object", "null"],
+            "properties": {
+              "job_id": { "type": "string" },
+              "trigger_type": { "type": "string", "enum": ["writes-trigger-data", "direct-launch", "job-chain", "event-driven"] }
+            }
+          }
+        }
+      }
+    },
+    "pending_review": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "item": { "type": "string" },
+          "speculation": { "type": "string" },
+          "source": { "type": "string" },
+          "confidence": { "type": "string", "enum": ["high", "medium", "low"] },
+          "impact": { "type": "string" }
+        }
+      }
+    }
+  }
+}
