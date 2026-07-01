@@ -1,118 +1,118 @@
-# Project Analysis Profile
+# 專案分析設定卡（Project Analysis Profile）
 
 <!--
-  This is the per-repo "profile card". Place the filled copy at THIS REPO'S
-  ROOT as `.analysis-profile.md`. Every analysis/verification skill reads this
-  file first. If a field is unknown, leave the placeholder and the skill will
-  fall back to live auto-detection.
+  這是每個 repo 自己的「設定卡」。請把填好的檔案放在「這個 repo 的根目錄」，
+  命名為 `.analysis-profile.md`。每個分析／驗證技能都會優先讀取這份檔案。
+  若某個欄位不確定，可保留樣板中的預留位置，技能會退回即時自動偵測。
 
-  Generate this automatically with the `analysis-init` skill, or fill it by hand.
-  A filled real-world example is in:
+  可用 `analysis-init` 技能自動產生，或手動填寫。
+  已填寫完成的實際範例在：
   templates/examples/analysis-profile.example.md
 
-  WORKSPACE MODE: if this repo lives alongside sibling repos under one parent
-  folder (e.g. frontend + backend split, or several microservices), a
-  `.workspace-profile.md` at the PARENT folder registers all of them as
-  "services" — see templates/workspace-profile.template.md and the
-  `workspace-discovery` skill. Fill §0 below so other repos' outbound calls
-  can be matched back to this one. If this repo is standalone, leave §0 as-is
-  and skip workspace mode entirely — nothing else in this card changes.
+  工作區模式：如果這個 repo 與其他 repo 並排存放在同一個父資料夾下
+  （例如前後端分離，或多個微服務），父資料夾下會有一份
+  `.workspace-profile.md`，把所有 repo 登錄為「服務（service）」——
+  詳見 templates/workspace-profile.template.md 與 `workspace-discovery`
+  技能。請填寫下方 §0，讓其他 repo 對外呼叫時能對應回這個 repo。
+  若這個 repo 是獨立專案，§0 保持原樣即可，完全略過工作區模式——
+  這份卡片其他部分不受影響。
 -->
 
-## 0. Service identity (workspace mode only — leave blank if standalone)
+## 0. 服務身分識別（僅工作區模式使用——若為獨立 repo 可留空）
 
-- **service_id**: <short unique id used in the workspace registry, e.g. `billing-api`>
-- **service_kind**: <frontend / backend / shared-lib / gateway / other>
-- **Base URL / known aliases**: <host:port, internal DNS name, or gateway route
-  prefix this service is reachable at — used to match OTHER repos' outbound
-  calls back to this repo; comma-separate multiple aliases, or "N/A">
+- **service_id**：<工作區登錄表使用的簡短唯一識別碼，例如 `billing-api`>
+- **service_kind**：<frontend / backend / shared-lib / gateway / other>
+- **Base URL / 已知別名**：<可連線到此服務的 host:port、內部 DNS 名稱，
+  或 gateway 路由前綴——用於比對「其他 repo」對外呼叫是否指向這個
+  repo；多個別名以逗號分隔，或填 "N/A">
 
-## 1. Project identity
+## 1. 專案身分識別
 
-- **Project name**: <NAME>
-- **One-line purpose**: <what this system does>
-- **Primary language(s)**: <e.g. Java / TypeScript / Python>
-- **Repository root marker**: <e.g. pom.xml / package.json / Cargo.toml>
+- **專案名稱**：<NAME>
+- **一句話說明用途**：<這個系統是做什麼的>
+- **主要語言**：<例如 Java / TypeScript / Python>
+- **repo 根目錄標記檔**：<例如 pom.xml / package.json / Cargo.toml>
 
-## 2. Build system & tech stack
+## 2. 建置系統與技術堆疊
 
-- **Build tool**: <e.g. Maven multi-module / npm / Gradle / pip>
-- **Frameworks**: <e.g. Spring 4 / React / Django>
-- **Persistence / ORM**: <e.g. MyBatis + Oracle / Prisma + Postgres / none>
-- **Web/UI layer**: <e.g. JSF+PrimeFaces / Next.js / none>
-- **Web services / API style**: <e.g. SOAP(CXF) / REST(Spring MVC) / GraphQL / none>
-- **Batch / scheduling**: <e.g. Spring Batch + Quartz / cron / none>
-- **Build commands**: <e.g. `mvn clean install -DskipTests` / `npm run build`>
-- **Test commands**: <e.g. `mvn test` / `npm test`>
+- **建置工具**：<例如 Maven multi-module / npm / Gradle / pip>
+- **框架**：<例如 Spring 4 / React / Django>
+- **持久層／ORM**：<例如 MyBatis + Oracle / Prisma + Postgres / 無>
+- **Web/UI 層**：<例如 JSF+PrimeFaces / Next.js / 無>
+- **Web services / API 風格**：<例如 SOAP(CXF) / REST(Spring MVC) / GraphQL / 無>
+- **批次／排程**：<例如 Spring Batch + Quartz / cron / 無>
+- **建置指令**：<例如 `mvn clean install -DskipTests` / `npm run build`>
+- **測試指令**：<例如 `mvn test` / `npm test`>
 
-## 3. Module / layer map  <!-- REQUIRED: fill at least one row -->
+## 3. 模組／分層對照表  <!-- 必填：至少填一列 -->
 
-> Where each architectural layer lives. Use path globs relative to repo root.
-> Add/remove rows to match the project. Skills use this to locate code.
+> 每個架構分層實際位於哪裡。路徑請用相對於 repo 根目錄的 path glob。
+> 可依專案實際情況增減列數。各技能會依此定位程式碼位置。
 
-| Layer / role | Path glob(s) | Notes |
+| 分層／角色 (Layer / role) | 路徑 glob | 備註 |
 |--------------|--------------|-------|
-| Entry – UI pages | `<glob>` | <e.g. controllers, view templates> |
-| Entry – Web service endpoints | `<glob>` | |
+| Entry – UI 頁面 | `<glob>` | <例如 controllers、view templates> |
+| Entry – Web service 端點 | `<glob>` | |
 | Entry – REST API controllers | `<glob>` | |
-| Entry – Batch jobs | `<glob>` | |
-| Business / service layer | `<glob>` | |
-| Data-access (mapper/repo/DAO) | `<glob>` | |
+| Entry – 批次工作 (Batch jobs) | `<glob>` | |
+| 商業／服務層 (Business / service layer) | `<glob>` | |
+| 資料存取層 (mapper/repo/DAO) | `<glob>` | |
 | Domain models / DTOs | `<glob>` | |
-| Constants / enums | `<glob>` | |
-| Shared utilities | `<glob>` | |
-| DB migration scripts | `<glob>` | |
+| 常數／enum (Constants / enums) | `<glob>` | |
+| 共用工具類 (Shared utilities) | `<glob>` | |
+| DB migration 腳本 | `<glob>` | |
 
-## 4. Entry-point types present  <!-- REQUIRED: tick at least one -->
+## 4. 存在的進入點類型  <!-- 必填：至少勾選一項 -->
 
-> Tick the entry-point types this project has. The `sa` agent dispatches by
-> entry-point type (UI / WS-API / Batch); orchestration skips inapplicable steps.
+> 勾選這個專案有的進入點類型。`sa` agent 會依進入點類型分派
+> （UI / WS-API / Batch）；不適用的步驟會被 orchestration 跳過。
 
-- [ ] UI pages
-- [ ] SOAP / Web-service endpoints
-- [ ] REST API endpoints
-- [ ] Batch jobs
-- [ ] CLI / standalone
+- [ ] UI 頁面
+- [ ] SOAP / Web-service 端點
+- [ ] REST API 端點
+- [ ] 批次工作 (Batch jobs)
+- [ ] CLI / 獨立程式
 
-**How to find an entry point**: <how a human/agent locates the entry for a
-feature — e.g. "search xhtml under webapp", "controllers annotated @RestController">
+**如何找到進入點**：<人類或 agent 如何定位某個功能的進入點——
+例如「在 webapp 底下搜尋 xhtml」、「標註 @RestController 的 controller」>
 
-## 5. Persistence conventions
+## 5. 持久層慣例
 
-- **Schema prefix in queries**: <e.g. `APP.` / `dbo.` / none>
-- **Table naming**: <e.g. UPPER_SNAKE / snake_case>
-- **Sequence / id strategy**: <e.g. `<TABLE>_SEQ.nextval` / auto-increment / UUID>
-- **Multiple data sources / transaction managers**: <list names, or "single">
-- **Code/value mapping tables or maps**: <e.g. external→internal code maps, or none>
+- **查詢中的 schema 前綴**：<例如 `APP.` / `dbo.` / 無>
+- **資料表命名慣例**：<例如 UPPER_SNAKE / snake_case>
+- **序號／id 策略**：<例如 `<TABLE>_SEQ.nextval` / 自動遞增 / UUID>
+- **多個資料來源／transaction manager**：<列出名稱，或填「單一」>
+- **代碼／值對照表或 map**：<例如外部→內部代碼對照表，或填「無」>
 
-## 6. Naming & code conventions to watch
+## 6. 需注意的命名與程式碼慣例
 
-- **Constant classes / pattern**: <e.g. `*Const.java` under constants/, or none>
-- **Auto-generated vs hand-written code**: <e.g. generated mappers vs `ext/` hand-written>
-- **Project-specific pitfalls**: <e.g. selective vs full update semantics,
-  object-reference sharing, BigDecimal compare — or "none known">
+- **常數類別／命名模式**：<例如 constants/ 底下的 `*Const.java`，或填「無」>
+- **自動產生 vs 手寫程式碼**：<例如自動產生的 mapper vs `ext/` 底下手寫的部分>
+- **本專案特有的地雷／注意事項**：<例如 selective vs full update 語意差異、
+  物件參照共用問題、BigDecimal 比較方式——或填「目前未知」>
 
-## 7. Output documents  <!-- REQUIRED: set docs_root -->
+## 7. 輸出文件  <!-- 必填：需設定 docs_root -->
 
-- **Docs output root**: <e.g. `docs/analysis` / `.analysis/docs`>
-- **Path convention**: <e.g. `<root>/<module>/<feature>/<page>/<function>/<TYPE>.md`>
-- **Cross-feature overview location**: <e.g. `<root>/_global/<feature>-overview/`>
+- **文件輸出根目錄**：<例如 `docs/analysis` / `.analysis/docs`>
+- **路徑慣例**：<例如 `<root>/<module>/<feature>/<page>/<function>/<TYPE>.md`>
+- **跨功能總覽存放位置**：<例如 `<root>/_global/<feature>-overview/`>
 
-## 8. UI verification (optional — for playwright-verify)
+## 8. UI 驗證設定（選填——供 playwright-verify 使用）
 
-- **App base URL**: <e.g. http://localhost:8080 — or "N/A: no running env">
-- **Login flow**: <steps or "none" / "N/A">
-- **Test credentials source**: <env var name — never hard-code secrets here>
+- **App base URL**：<例如 http://localhost:8080 —— 或填「N/A：無可用環境」>
+- **登入流程**：<步驟說明，或填「無」/「N/A」>
+- **測試帳密來源**：<環境變數名稱——絕對不要把機密資訊直接寫在這裡>
 
-> If this section is N/A, the `ui-verify` step is skipped and annotated as such.
+> 若這一節填 N/A，`ui-verify` 步驟會被跳過並標註原因。
 
-## 9. Domain glossary (optional)
+## 9. 領域詞彙表（選填）
 
-| Term | Meaning |
-|------|---------|
-| <term> | <definition> |
+| 詞彙 | 意義 |
+|------|------|
+| <詞彙> | <定義> |
 
-## 10. Working directory for orchestration state
+## 10. Orchestration 執行狀態的工作目錄
 
-- **Harness/run state dir**: <e.g. `.analysis/harness` — where orchestrators
-  write run state.json / handoff files; defaults to `.analysis/harness` if unset>
+- **Harness/run state 目錄**：<例如 `.analysis/harness`——orchestrator
+  寫入 run state.json / handoff 檔案的位置；未設定時預設為
+  `.analysis/harness`>

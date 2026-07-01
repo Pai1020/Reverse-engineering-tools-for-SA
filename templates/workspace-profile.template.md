@@ -1,65 +1,63 @@
-# Workspace Profile
+# 工作區設定卡（Workspace Profile）
 
 <!--
-  This is the WORKSPACE-level card — one level above per-repo profile cards.
-  Place the filled copy at the PARENT FOLDER that contains all the repos as
-  `.workspace-profile.md` (sibling of the repo directories, not inside any
-  one of them).
+  這是「工作區層級」的設定卡——比各 repo 自己的設定卡高一層。
+  請把填好的檔案放在包含所有 repo 的「父資料夾」下，命名為
+  `.workspace-profile.md`（與各 repo 目錄同層，不要放進任何一個 repo 裡）。
 
-  Use this when a "project" is actually multiple repos checked out side by
-  side under one folder: a separated frontend + backend, or several
-  microservices. Each listed repo keeps its OWN `.analysis-profile.md` at its
-  own root, unchanged in format (see templates/analysis-profile.template.md
-  §0 for the per-repo service_id/kind/base_url fields this card cross-refers
-  to).
+  當一個「專案」實際上是由多個並排存放在同一個資料夾下的 repo 組成時
+  （前後端分離，或多個微服務），才需要這份卡片。每個列出的 repo
+  仍會保留自己獨立的 `.analysis-profile.md`，格式不變（見
+  templates/analysis-profile.template.md §0，這份卡片會交叉參照該處
+  的 service_id/kind/base_url 欄位）。
 
-  Generate this automatically with the `workspace-discovery` skill (invoked
-  by `/workspace-init`), or fill it by hand.
+  可用 `workspace-discovery` 技能（透過 `/workspace-init` 呼叫）自動產生，
+  或手動填寫。
 
-  FALLBACK CONTRACT: if this file does not exist, every skill/command in this
-  plugin behaves exactly as in single-repo mode — this file is purely
-  additive and nothing downstream requires it.
+  後備機制（FALLBACK CONTRACT）：若此檔案不存在，本 plugin 的所有
+  技能／指令行為會與單一 repo 模式完全相同——這份檔案純屬附加功能，
+  沒有任何下游流程強制要求它存在。
 -->
 
-## 1. Workspace identity
+## 1. 工作區身分識別
 
-- **Workspace name**: <NAME — e.g. the overall system/product name>
-- **One-line purpose**: <what the overall system does, across all services>
+- **工作區名稱**：<NAME —— 例如整體系統／產品名稱>
+- **一句話說明用途**：<這個整體系統是做什麼的，橫跨所有服務>
 
-## 2. Service registry  <!-- REQUIRED: at least one row -->
+## 2. 服務登錄表（Service registry）  <!-- 必填：至少一列 -->
 
-> One row per repo under this parent folder. `path` is relative to this
-> workspace-profile.md's own location. `service_id` must match the `service_id`
-> in that repo's own `.analysis-profile.md` §0. **`purpose` must come from the
-> user, not be silently inferred** — see `workspace-discovery` Step 3.
+> 每個位於此父資料夾下的 repo 各佔一列。`path` 是相對於這份
+> workspace-profile.md 自身位置的相對路徑。`service_id` 必須與該 repo
+> 自己 `.analysis-profile.md` §0 裡的 `service_id` 一致。**`purpose`
+> 欄位必須來自使用者確認，不可由 AI 自行推測填入**——見
+> `workspace-discovery` 技能 Step 3。
 
-| service_id | path | kind | purpose | primary language/framework | base_url / aliases | profile card |
+| service_id | path（路徑） | kind（類型） | purpose（用途） | 主要語言／框架 | base_url / 別名 | 設定卡路徑 |
 |------------|------|------|---------|----------------------------|---------------------|--------------|
-| `<service_id>` | `<relative/path>` | frontend / backend / shared-lib / gateway | <one-line: what this service is for, confirmed with the user> | <e.g. Angular 17 / Spring Boot 3> | <host:port or "N/A"> | `<path>/.analysis-profile.md` |
+| `<service_id>` | `<relative/path>` | frontend / backend / shared-lib / gateway | <一句話：這個服務是做什麼的，已與使用者確認過> | <例如 Angular 17 / Spring Boot 3> | <host:port 或 "N/A"> | `<path>/.analysis-profile.md` |
 
-## 3. Cross-service call matching
+## 3. 跨服務呼叫比對規則（Cross-service call matching）
 
-> How `dependency-analysis` decides an outbound call is "cross-service" (calls
-> another row above) vs a genuine external third party. List any indirection
-> that isn't a literal base_url match (e.g. a service-discovery name, a
-> gateway path prefix, an env var holding the real host).
+> `dependency-analysis` 如何判斷一個對外呼叫是「跨服務」（呼叫上面登錄表
+> 中的另一列）還是真正的外部第三方系統。請列出任何無法直接用 base_url
+> 字面比對出來的間接關係（例如 service-discovery 名稱、API gateway 路徑
+> 前綴、透過環境變數決定真實主機位置等）。
 
-- **Matching notes**: <e.g. "gateway routes /api/billing/** to billing-api",
-  "service names resolved via Consul — match by Consul service name, not host">
-- **Known genuine external systems (not in the registry, do not try to match)**:
-  <e.g. payment gateway, SMS provider, upstream partner system — or "none">
+- **比對備註**：<例如「gateway 會將 /api/billing/** 路由到 billing-api」、
+  「服務名稱透過 Consul 解析——請用 Consul 服務名稱比對，而非 host」>
+- **已知的真正外部系統（不在登錄表內，不需嘗試比對）**：
+  <例如金流閘道、簡訊供應商、上游合作夥伴系統——或填「無」>
 
-## 4. Workspace-level output & harness paths
+## 4. 工作區層級的輸出與 harness 路徑
 
-- **Workspace docs root**: <e.g. `.analysis/docs` — cross-service artifacts
-  like SERVICE-MAP.md land under `<this>/_workspace/`>
-- **Workspace harness dir**: <e.g. `.analysis/harness` — run state for every
-  service's analysis runs lives here, one run_id per run regardless of which
-  service it targets>
+- **工作區文件輸出根目錄**：<例如 `.analysis/docs`——跨服務產出物
+  （如 SERVICE-MAP.md）會放在 `<此路徑>/_workspace/` 下>
+- **工作區 harness 目錄**：<例如 `.analysis/harness`——所有服務的分析
+  執行狀態都存在這裡，每次執行一個 run_id，無論目標是哪個服務>
 
-## 5. Notes
+## 5. 備註
 
-- **Repo discovery method used**: <e.g. "scanned for pom.xml/package.json/angular.json
-  under each immediate child folder">
-- **Anything intentionally excluded from the registry**: <e.g. archived repos,
-  infra/deploy-only repos — or "none">
+- **repo 探索方式**：<例如「掃描每個直屬子資料夾底下的
+  pom.xml/package.json/angular.json」>
+- **刻意排除於登錄表之外的項目**：<例如已封存的 repo、僅供
+  infra/部署用途的 repo——或填「無」>
